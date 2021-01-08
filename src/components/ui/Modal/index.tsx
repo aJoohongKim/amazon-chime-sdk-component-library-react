@@ -24,6 +24,8 @@ export interface ModalProps
   size?: ModalSize;
   /** The rootId of the modal. */
   rootId?: string;
+  /** Optional prop to prevent the modal from closing. */
+  dismissible?: boolean;
 }
 
 export const Modal: FC<ModalProps> = ({
@@ -31,15 +33,16 @@ export const Modal: FC<ModalProps> = ({
   onClose,
   children,
   rootId,
+  dismissible = false,
   ...rest
 }) => {
   const labelID = useUniqueId();
   const contentEl = useRef<HTMLDivElement>(null);
   const mainEl = useRef<HTMLDivElement>(null);
 
-  const modalContext = { onClose, labelID };
+  const modalContext = { onClose, labelID, dismissible };
 
-  useClickOutside(mainEl, onClose);
+  !dismissible && useClickOutside(mainEl, onClose);
 
   useEffect(() => {
     // return focus to the element that triggered the
